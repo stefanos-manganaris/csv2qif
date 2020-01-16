@@ -79,6 +79,17 @@ sub printTrans {
 
 	  last SWITCH;
       }
+      if ($trans{'type'} =~ /^Withdraw/) {
+
+	  print QIF "D$trans{'date'}\n";
+	  print QIF "N$trans{'type'}\n";
+	  print QIF "U$trans{'invstamt'}\n";
+	  print QIF "T$trans{'totalamt'}\n";
+	 #print QIF "M$trans{'memo'}\n";
+	  print QIF "^\n";
+
+	  last SWITCH;
+      }
       
       # otherwise #
 
@@ -103,7 +114,8 @@ sub mapTType {
       if (/^\s*REINVESTMENT/) { $type="Buy"; last SWITCH; }
       if (/^\s*LONG-TERM CAP GAIN/) { $type="CGLong"; last SWITCH; }
       if (/^\s*INTEREST EARNED/) { $type="IntInc"; last SWITCH; }
-      if (/^\s*CO CONTR CURRENT YR  EMPLOYER CUR YR/) { $type="Deposit"; last SWITCH; }
+      if (/^\s*CO CONTR CURRENT YR\s+EMPLOYER CUR YR/) { $type="Deposit"; last SWITCH; }
+      if (/^\s*NORMAL DISTR PARTIAL/) { $type="Withdraw"; last SWITCH; }
       $type="??";
     }
     return($type);
