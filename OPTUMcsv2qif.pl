@@ -95,7 +95,7 @@ sub printTrans {
 }
 
 sub mapTType {
-    local $_=shift;
+    local $_=uc(shift);
     my $type;
 
   SWITCH: {
