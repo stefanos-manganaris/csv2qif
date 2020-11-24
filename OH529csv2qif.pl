@@ -80,8 +80,8 @@ sub mapTType {
       if (/^Exchange In Age-Based/) { $type="Buy"; last SWITCH; }
       if (/^Exchange Out Age-Based/) { $type="Sell"; last SWITCH; }
       if (/^Contribution AIP/) { $type="Buy"; last SWITCH; }
-      if (/^Qualified w\/d Bene/) { $type="SellX"; last SWITCH; }
-      if (/^Qualified w\/d Acct Owner/) { $type="SellX"; last SWITCH; }
+      if (/^Qualified w\/d Bene/) { $type="Sell"; last SWITCH; }
+      if (/^Qualified w\/d Acct Owner/) { $type="Sell"; last SWITCH; }
       $type="??";
     }
     return($type);
