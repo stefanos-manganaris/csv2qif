@@ -116,6 +116,7 @@ sub mapTType {
       if (/^\s*INTEREST EARNED/) { $type="IntInc"; last SWITCH; }
       if (/^\s*CO CONTR CURRENT YR\s+EMPLOYER CUR YR/) { $type="Deposit"; last SWITCH; }
       if (/^\s*NORMAL DISTR PARTIAL/) { $type="Withdraw"; last SWITCH; }
+      if (/^\s*YOU SOLD/) { $type="Sell"; last SWITCH; }
       $type="??";
     }
     return($type);
@@ -142,7 +143,11 @@ while (<CSV>) {
       if ($body) {
 	  chop;
 	  my ($rdate,$type,$cusip,$security,$sectype,$qty,$price,$commision,$fees,$intrst,$amt,$sdate) = split ',';
-	  if ($type =~ /^\s*PARTIC CONTR CURRENT PARTICIPANT CUR YR/) { last SWITCH; }
+	  if ($type =~ /^\s*PARTIC CONTR CURRENT PARTICIPANT CUR YR/) { last SWITCH; }					# already recorded
+	  if ($type =~ /^\s*PURCHASE INTO CORE ACCOUNT FDIC INSURED DEPOSIT AT CITIBANK/) { last SWITCH; }		# ignore transfers between cash accounts
+	  if ($type =~ /^\s*PURCHASE INTO CORE ACCOUNT FDIC INSURED DEPOSIT AT WELLS FARGO/) { last SWITCH; }		# ignore transfers between cash accounts
+	  if ($type =~ /^\s*REDEMPTION FROM CORE ACCOUNT FDIC INSURED DEPOSIT AT CITIBANK/) { last SWITCH; }		# ignore transfers between cash accounts
+	  if ($type =~ /^\s*REDEMPTION FROM CORE ACCOUNT FDIC INSURED DEPOSIT AT WELLS FARGO/) { last SWITCH; }		# ignore transfers between cash accounts
 	  else {
 	      %trans = initTrans();
 	      $trans{'date'}=cleandt($rdate);
