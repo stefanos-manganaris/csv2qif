@@ -150,11 +150,11 @@ my $body=0;
 
 while (<CSV>) {
   SWITCH: {
-      if (/^Run Date,Action,Symbol,Security Description,Security Type,Quantity,Price \(\$\),Commission \(\$\),Fees \(\$\),Accrued Interest \(\$\),Amount \(\$\),Settlement Date/) { $body=1; last SWITCH; }
+      if (/^Run Date,Action,Symbol,Description,Type,Exchange Quantity,Exchange Currency,Quantity,Currency,Price,Exchange Rate,Commission,Fees,Accrued Interest,Amount,Cash Balance,Settlement Date/) { $body=1; last SWITCH; }
       if ($body && /^\s*$/) { $body=0; last SWITCH; }
       if ($body) {
 	  chop;
-	  my ($rdate,$type,$cusip,$security,$sectype,$qty,$price,$commision,$fees,$intrst,$amt,$sdate) = split ',';
+	  my ($rdate,$type,$cusip,$security,$sectype,$eqty,$ecurr,$qty,$curr,$price,$erate,$commision,$fees,$intrst,$amt,$cash,$sdate) = split ',';
 	  if ($type =~ /^\s*PURCHASE INTO CORE ACCOUNT/) { last SWITCH; }	# ignore settlements in money market funds
  	  if ($type =~ /^\s*REDEMPTION FROM CORE ACCOUNT/) { last SWITCH; }	# ignore settlements in money market funds
 	  else {
