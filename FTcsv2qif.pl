@@ -161,7 +161,7 @@ while (<CSV>) {
 	      %trans = initTrans();
 	      $trans{'date'}=cleandt($rdate);
 	      $trans{'type'}=mapTType($type);
-	      if ($semap{$security}) { $trans{'security'}=$semap{$security}; } else { $trans{'security'}=cleansec($cusip); }
+	      if ($semap{$cusip}) { $trans{'security'}=$semap{$cusip}; } else { $trans{'security'}=cleansec($cusip); }
 	      $trans{'price'}=cleanamt($price);
 	      $trans{'qty'}=abs($qty); 
 	      $trans{'invstamt'}=cleanamt($amt);
