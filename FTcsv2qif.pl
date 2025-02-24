@@ -45,7 +45,7 @@ sub initTrans {
 
 sub printTrans {
   SWITCH: {
-      if ($trans{'type'} =~ /^(Div|CGLong)/) {
+      if ($trans{'type'} =~ /^(Div|CGLong|CGShort)/) {
 
 	  print QIF "D$trans{'date'}\n";
 	  print QIF "N$trans{'type'}\n";
@@ -79,13 +79,13 @@ sub printTrans {
 
 	  last SWITCH;
       }
-      if ($trans{'type'} =~ /^Withdraw/) {
+      if ($trans{'type'} =~ /^(Withdraw|MiscExp)/) {
 
 	  print QIF "D$trans{'date'}\n";
 	  print QIF "N$trans{'type'}\n";
 	  print QIF "U$trans{'invstamt'}\n";
 	  print QIF "T$trans{'totalamt'}\n";
-	 #print QIF "M$trans{'memo'}\n";
+	  print QIF "M$trans{'memo'}\n";
 	  print QIF "^\n";
 
 	  last SWITCH;
@@ -115,9 +115,14 @@ sub mapTType {
       if (/^\"?\s*DIVIDEND RECEIVED/) { $type="Div"; last SWITCH; }
       if (/^\"?\s*REINVESTMENT/) { $type="Buy"; last SWITCH; }
       if (/^\"?\s*LONG-TERM CAP GAIN/) { $type="CGLong"; last SWITCH; }
+      if (/^\"?\s*SHORT-TERM CAP GAIN/) { $type="CGShort"; last SWITCH; }
       if (/^\"?\s*INTEREST EARNED/) { $type="IntInc"; last SWITCH; }
       if (/^\"?\s*Electronic Funds Transfer Received \(Cash\)/) { $type="Deposit"; last SWITCH; }
+      if (/^\"?\s*TRANSFER OF ASSETS ACAT RES.CREDIT \(Cash\)/) { $type="Deposit"; last SWITCH; }
       if (/^\"?\s*NORMAL DISTR PARTIAL/) { $type="Withdraw"; last SWITCH; }
+      if (/^\"?\s*DISTRIBUTION /) { $type="ShrsIn"; last SWITCH; }
+      if (/^\"?\s*MERGER MER PAYOUT /) { $type="Sell"; last SWITCH; }
+      if (/^\"?\s*ADVISORY FEE (Cash)/) { $type="MiscExp"; last SWITCH; }
       $type="??";
     }
     return($type);
